@@ -10,6 +10,10 @@ import (
 	"github.com/nndergunov/messageBoard/server/pkg/logger"
 )
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 type endpointHandler struct {
 	router      *mux.Router
 	appInstance *app.App
@@ -58,6 +62,8 @@ func (e endpointHandler) statusHandler(responseWriter http.ResponseWriter, _ *ht
 }
 
 func (e endpointHandler) returnAllMessages(responseWriter http.ResponseWriter, _ *http.Request) {
+	enableCors(&responseWriter)
+
 	messages, err := e.appInstance.ReturnAllMessages()
 	if err != nil {
 		e.log.Println(err)
@@ -71,6 +77,8 @@ func (e endpointHandler) returnAllMessages(responseWriter http.ResponseWriter, _
 }
 
 func (e endpointHandler) createMessage(responseWriter http.ResponseWriter, request *http.Request) {
+	enableCors(&responseWriter)
+	
 	message, err := requestToMessage(request)
 	if err != nil {
 		if err != nil {

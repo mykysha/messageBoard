@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:web/message.dart';
+import 'package:web/postmessage.dart';
 
 class MessageField extends StatefulWidget {
   final List<Message> messages;
@@ -35,6 +36,7 @@ class _MessageFieldState extends State<MessageField> {
       );
       _controller.clear();
       widget.notifyParent(widget.messages);
+      createServerMessage(_nickname, _message, formatted);
     });
   }
 

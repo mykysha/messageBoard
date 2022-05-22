@@ -47,7 +47,7 @@ func (d DB) getUserByID(userID int) (*models.User, error) {
 func (d DB) InsertUser(nickname string) (int, error) {
 	id, err := d.getUserID(nickname)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		if !errors.Is(err, sql.ErrNoRows) {
 			return id, nil
 		}
 	}

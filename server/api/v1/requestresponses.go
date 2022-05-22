@@ -10,7 +10,3 @@ type Message struct {
 	Text   string
 	Time   string
 }
-
-type Messages struct {
-	Messages []Message
-}

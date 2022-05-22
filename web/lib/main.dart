@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web/message.dart';
 import 'package:web/message_field.dart';
 import 'package:web/message_list.dart';
+import 'package:web/postmessage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  List<Message> _messages = exampleMessages;
+  List<Message> _messages = <Message>[];
 
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -43,6 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getAllMessages().then((value) {
+      var reversedList = value.reversed;
+      refresh(reversedList.toList());
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -61,7 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         tooltip: 'Update',
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            getAllMessages().then((value) {
+              var reversedList = value.reversed;
+              refresh(reversedList.toList());
+            });
+          });
+        },
         child: const Icon(Icons.update_rounded),
       ),
     );
