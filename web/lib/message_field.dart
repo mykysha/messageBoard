@@ -1,7 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:web/message.dart';
 
-class MessageField extends StatelessWidget {
-  const MessageField({Key? key}) : super(key: key);
+class MessageField extends StatefulWidget {
+  final List<Message> messages;
+  final Function notifyParent;
+
+  const MessageField(
+      {Key? key, required this.notifyParent, required this.messages})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _MessageFieldState();
+  }
+}
+
+class _MessageFieldState extends State<MessageField> {
+  final _controller = TextEditingController();
+  String _nickname = "";
+  String _message = "";
+
+  void _send() {
+    setState(() {
+      var time = DateTime.now();
+      var formatted = DateFormat('dd/MM/yyyy HH:mm').format(time);
+      widget.messages.insert(
+        0,
+        Message(
+          author: _nickname,
+          message: _message,
+          time: formatted,
+        ),
+      );
+      _controller.clear();
+      widget.notifyParent(widget.messages);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +52,12 @@ class MessageField extends StatelessWidget {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+                    width: constraints.maxWidth,
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                     child: IntrinsicWidth(
                       child: TextField(
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.multiline,
                         maxLines: 1,
                         decoration: InputDecoration(
                           constraints: const BoxConstraints(minWidth: 94),
@@ -30,7 +67,7 @@ class MessageField extends StatelessWidget {
                           labelText: "nickname",
                         ),
                         onChanged: (text) {
-                          print('Name text field: $text');
+                          _nickname = text;
                         },
                       ),
                     ),
@@ -43,6 +80,7 @@ class MessageField extends StatelessWidget {
                 child: TextField(
                   keyboardType: TextInputType.multiline,
                   maxLines: 5,
+                  controller: _controller,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -50,11 +88,11 @@ class MessageField extends StatelessWidget {
                     labelText: "message",
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.send_rounded),
-                      onPressed: () {},
+                      onPressed: _send,
                     ),
                   ),
                   onChanged: (text) {
-                    print('Message text field: $text');
+                    _message = text;
                   },
                 ),
               ),

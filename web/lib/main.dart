@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:web/message.dart';
 import 'package:web/message_field.dart';
+import 'package:web/message_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +18,15 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
       ),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'AboltuSoft message board'),
+      home: MyHomePage(title: 'AboltuSoft message board'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  List<Message> _messages = exampleMessages;
+
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -31,6 +35,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  refresh(newMessages) {
+    setState(() {
+      widget._messages = newMessages;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,21 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.green,
-                  child: Column(
-                    children: <Widget>[
-                      const Text(
-                        'There will be messages in here soon.',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            MessageList(messages: widget._messages),
+            MessageField(
+              notifyParent: refresh,
+              messages: widget._messages,
             ),
-            const MessageField()
           ],
         ),
       ),
