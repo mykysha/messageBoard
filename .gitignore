@@ -1,6 +1,7 @@
 ### Configuraton files ###
 *.sql
 *.env
+*.toml
 config.yaml
 
 ### Flutter ###
