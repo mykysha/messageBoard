@@ -3,26 +3,22 @@ package handlers
 import (
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
-	v1 "github.com/nndergunov/goproxy/api/v1"
-	"github.com/nndergunov/goproxy/pkg/app/proxyapp"
-	"github.com/nndergunov/goproxy/pkg/logger"
+	v1 "github.com/nndergunov/messageBoard/server/api/v1"
+	"github.com/nndergunov/messageBoard/server/pkg/logger"
 )
 
 type endpointHandler struct {
-	proxy  *proxyapp.ProxyApp
 	router *mux.Router
 	log    *logger.Logger
 }
 
 // NewEndpointHandler returns new http multiplexer with configured endpoints.
-func NewEndpointHandler(proxy *proxyapp.ProxyApp, log *logger.Logger) *mux.Router {
+func NewEndpointHandler(log *logger.Logger) *mux.Router {
 	router := mux.NewRouter()
 
 	handler := endpointHandler{
-		proxy:  proxy,
 		router: router,
 		log:    log,
 	}
@@ -34,7 +30,6 @@ func NewEndpointHandler(proxy *proxyapp.ProxyApp, log *logger.Logger) *mux.Route
 
 func (e *endpointHandler) handlerInit() {
 	e.router.HandleFunc("/v1/status", e.statusHandler)
-	e.router.HandleFunc("/v1/file/{id}", e.fileFetcher).Methods(http.MethodGet)
 }
 
 func (e endpointHandler) statusHandler(responseWriter http.ResponseWriter, _ *http.Request) {
@@ -56,24 +51,4 @@ func (e endpointHandler) statusHandler(responseWriter http.ResponseWriter, _ *ht
 	}
 
 	e.log.Printf("\ngave status %s", data.IsUp)
-}
-
-func (e *endpointHandler) fileFetcher(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fileVar := vars["id"]
-
-	fileID, err := strconv.Atoi(fileVar)
-	if err != nil {
-		e.log.Println(err)
-	}
-
-	file, err := e.proxy.GetFile(fileID)
-	if err != nil {
-		e.log.Println(err)
-	}
-
-	_, err = w.Write(file)
-	if err != nil {
-		e.log.Println(err)
-	}
 }

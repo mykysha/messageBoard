@@ -7,7 +7,6 @@ import (
 	"github.com/nndergunov/messageBoard/server/api/v1/handlers"
 	"github.com/nndergunov/messageBoard/server/cmd/server"
 	"github.com/nndergunov/messageBoard/server/cmd/server/config"
-	"github.com/nndergunov/messageBoard/server/pkg/app/proxyapp"
 	"github.com/nndergunov/messageBoard/server/pkg/configreader"
 	"github.com/nndergunov/messageBoard/server/pkg/logger"
 )
@@ -20,11 +19,8 @@ func main() {
 		mainLogger.Panicln(err)
 	}
 
-	proxyAddr := configreader.GetString("proxy.goal-server")
-	proxy := proxyapp.NewProxyApp(proxyAddr)
-
 	handlerLogger := logger.NewLogger(os.Stdout, "handlers")
-	handler := handlers.NewEndpointHandler(proxy, handlerLogger)
+	handler := handlers.NewEndpointHandler(handlerLogger)
 
 	apiLogger := logger.NewLogger(os.Stdout, "handlers")
 	serverAPI := api.NewAPI(handler, apiLogger)

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/nndergunov/goproxy/pkg/logger"
+	"github.com/nndergunov/messageBoard/server/pkg/logger"
 )
 
 // Config consists of data needed for server configuration.

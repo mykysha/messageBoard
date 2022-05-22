@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/nndergunov/goproxy/cmd/server/config"
-	"github.com/nndergunov/goproxy/pkg/logger"
+	"github.com/nndergunov/messageBoard/server/cmd/server/config"
+	"github.com/nndergunov/messageBoard/server/pkg/logger"
 )
 
 // Server defines an http server.
