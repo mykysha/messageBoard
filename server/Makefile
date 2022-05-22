@@ -28,6 +28,7 @@ update-gomod:
 download-gomod:
 	go get -u "github.com/spf13/viper"
 	go get -u "github.com/gorilla/mux"
+	go get -u "github.com/lib/pq"
 
 gomod-tidy:
 	go mod tidy -go=1.18.2 -compat=1.18.2

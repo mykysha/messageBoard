@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: messageboard-db-postgres
+    environment:
+      - POSTGRES_USER=${USER}
+      - POSTGRES_PASSWORD=${PASS}
+      - POSTGRES_DB=${NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./message_board.sql:/docker-entrypoint-initdb.d/message_board.sql
