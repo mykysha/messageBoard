@@ -1,3 +1,8 @@
+### Configuraton files ###
+*.sql
+*.env
+config.yaml
+
 ### Flutter ###
 # Flutter/Dart/Pub related
 **/doc/api/
